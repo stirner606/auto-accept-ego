@@ -174,7 +174,7 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
     quotaHandler.fetchQuota();
   }, 10000);
 
-  // Poll for stats every 5 seconds
+  // Backup polling every 60 seconds (main work is now event-driven in CDP Handler)
   pollTimer = setInterval(async () => {
     const config = vscode.workspace.getConfiguration("auto-accept-ego");
     if (!config.get<boolean>("enabled", true)) {
@@ -185,7 +185,7 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
     // Update stats
     vscode.commands.executeCommand("auto-accept-ego.updateBadge");
 
-    // Re-sync with browser
+    // Re-sync with browser (backup check, main reconnection is handled by CDP events)
     await cdpHandler.start({
       pollInterval: 300,
       bannedCommands: [
@@ -205,7 +205,7 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
       whitelist: config.get<string[]>("whitelist", []),
       safeMode: config.get<boolean>("safeMode", false),
     });
-  }, 5000);
+  }, 60000); // Changed from 5000ms to 60000ms (backup polling)
 
   console.log("Auto Accept Ego: Polling started");
 }
