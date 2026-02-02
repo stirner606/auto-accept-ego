@@ -13,12 +13,7 @@ Stop babysitting your AI. **Auto Accept Ego** handles approval dialogs, terminal
 - **📊 AI Quota Tracking:** Real-time monitoring of your AI model limits.
   - Supports Claude, Gemini, and GPT models
   - Visual progress bars with percentage display
-  - Reset timers (e.g., "Resets in 1h 30m")
-  - Automatically starts 10 seconds after launch
-  - Auto-refreshes every 2 minutes with smart retry
-  - Manual refresh button with loading feedback
-- **🎛️ Premium Dashboard:** A sleek, glassmorphism-inspired UI to track stats, manage settings, and reset statistics.
+- **🎛️ Dashboard:** A clean UI to track stats, manage settings, and reset statistics.
 - **🌍 Multi-Language:** Built-in support for English and Turkish with instant switching.
-- **🚀 Zero-Touch:** Fully automated workflow with adjustable delays, safe modes, and background CDP handling.
 
-**Made with 💜 by stirner606**
+**Made by stirner606**
