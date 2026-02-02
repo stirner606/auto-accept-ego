@@ -1,0 +1,136 @@
+{
+  "name": "auto-accept-ego",
+  "displayName": "Auto Accept Ego",
+  "description": "Professional auto-acceptance for Antigravity AI agents with advanced security and premium dashboard.",
+  "version": "1.4.0",
+  "publisher": "stirner606",
+  "icon": "images/icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stirner606/auto-accept-ego.git"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Tools"
+  ],
+  "keywords": [
+    "auto",
+    "accept",
+    "agent",
+    "antigravity",
+    "automation",
+    "security",
+    "cdp"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "auto-accept-ego.openDashboard",
+        "title": "Open Ego Dashboard",
+        "category": "Auto Accept Ego"
+      },
+      {
+        "command": "auto-accept-ego.toggle",
+        "title": "Toggle Auto Accept On/Off",
+        "category": "Auto Accept Ego"
+      }
+    ],
+    "configuration": {
+      "title": "Auto Accept Ego",
+      "properties": {
+        "auto-accept-ego.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable or disable auto acceptance globally."
+        },
+        "auto-accept-ego.language": {
+          "type": "string",
+          "enum": [
+            "tr",
+            "en"
+          ],
+          "default": "en",
+          "description": "Extension language (English/Turkish)."
+        },
+        "auto-accept-ego.onThreatAction": {
+          "type": "string",
+          "enum": [
+            "stop",
+            "skip"
+          ],
+          "default": "stop",
+          "description": "What to do when a dangerous command is detected."
+        },
+        "auto-accept-ego.safeMode": {
+          "type": "boolean",
+          "default": false,
+          "description": "Safe Mode: Only allow commands in the whitelist."
+        },
+        "auto-accept-ego.dangerThreshold": {
+          "type": "number",
+          "default": 70,
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Danger score threshold (0-100). Commands with score >= threshold are blocked."
+        },
+        "auto-accept-ego.categories.files": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-accept file edits."
+        },
+        "auto-accept-ego.categories.terminal": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-accept terminal commands."
+        },
+        "auto-accept-ego.categories.dialogs": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-accept confirmation dialogs."
+        },
+        "auto-accept-ego.categories.git": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-accept Git operations."
+        },
+        "auto-accept-ego.categories.package": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-accept package management commands."
+        },
+        "auto-accept-ego.customBlacklist": {
+          "type": "array",
+          "default": [],
+          "description": "Custom list of dangerous command patterns."
+        },
+        "auto-accept-ego.whitelist": {
+          "type": "array",
+          "default": [],
+          "description": "Trusted folders/commands that are always allowed."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile && npm run copy-assets",
+    "compile": "tsc -p ./",
+    "copy-assets": "node -e \"require('fs').copyFileSync('src/cdp/inject-script.js', 'out/cdp/inject-script.js')\"",
+    "watch": "tsc -watch -p ./"
+  },
+  "dependencies": {
+    "ws": "^8.14.2"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "16.x",
+    "@types/ws": "^8.5.8",
+    "typescript": "^4.9.4"
+  }
+}
