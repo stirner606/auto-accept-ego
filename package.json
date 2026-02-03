@@ -2,7 +2,7 @@
   "name": "auto-accept-ego",
   "displayName": "Auto Accept Ego",
   "description": "Professional auto-acceptance for Antigravity AI agents with advanced security and premium dashboard.",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "publisher": "stirner606",
   "icon": "images/icon.png",
   "license": "MIT",
@@ -14,7 +14,8 @@
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Tools"
+    "Productivity",
+    "Machine Learning"
   ],
   "keywords": [
     "auto",
@@ -23,7 +24,11 @@
     "antigravity",
     "automation",
     "security",
-    "cdp"
+    "cdp",
+    "productivity",
+    "workflow",
+    "terminal",
+    "dialog-handler"
   ],
   "activationEvents": [
     "onStartupFinished"
