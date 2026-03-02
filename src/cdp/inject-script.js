@@ -36,9 +36,13 @@
         try {
           const doc = iframe.contentDocument || iframe.contentWindow?.document;
           if (doc) docs.push(...getDocuments(doc));
-        } catch {}
+        } catch {
+          /* Cross-origin iframe, access denied - expected */
+        }
       }
-    } catch {}
+    } catch {
+      /* iframe enumeration failed, skip */
+    }
     return docs;
   };
 
@@ -47,7 +51,9 @@
     getDocuments().forEach((doc) => {
       try {
         results.push(...Array.from(doc.querySelectorAll(selector)));
-      } catch {}
+      } catch {
+        /* Cross-origin document query failed, skip */
+      }
     });
     return results;
   };

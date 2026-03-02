@@ -50,7 +50,7 @@ export class Relauncher {
       // Seamless mode: Don't block with modal.
       // Option 1: Just show a transient message
       vscode.window.showInformationMessage(
-        "Auto Accept Ego: Setup complete. Please restart IDE to enable premium features."
+        "Auto Accept Ego: Setup complete. Please restart IDE to enable premium features.",
       );
       // Option 2: Could auto-restart, but might lose data. Sticking to notification.
       return { success: true, relaunched: false };
@@ -58,7 +58,7 @@ export class Relauncher {
       this.log("Could not modify shortcut automatically.");
       // Silent failure or status bar warning could be better, but warning message is safer for now.
       vscode.window.showWarningMessage(
-        `Auto Accept Ego: Setup failed. Please restart manually with: ${CDP_FLAG}`
+        `Auto Accept Ego: Setup failed. Please restart manually with: ${CDP_FLAG}`,
       );
     }
 
@@ -134,7 +134,7 @@ if ($modified) { Write-Output "MODIFIED" } else { Write-Output "NO_CHANGE" }
         ".local",
         "share",
         "applications",
-        `${ideName}.desktop`
+        `${ideName}.desktop`,
       ),
       `/usr/share/applications/${ideName}.desktop`,
     ];
@@ -145,14 +145,14 @@ if ($modified) { Write-Output "MODIFIED" } else { Write-Output "NO_CHANGE" }
         if (!content.includes("--remote-debugging-port=9000")) {
           content = content.replace(
             /^Exec=(.*)$/m,
-            "Exec=$1 --remote-debugging-port=9000"
+            "Exec=$1 --remote-debugging-port=9000",
           );
           const userPath = path.join(
             os.homedir(),
             ".local",
             "share",
             "applications",
-            path.basename(p)
+            path.basename(p),
           );
           fs.mkdirSync(path.dirname(userPath), { recursive: true });
           fs.writeFileSync(userPath, content);
@@ -181,7 +181,7 @@ if ($modified) { Write-Output "MODIFIED" } else { Write-Output "NO_CHANGE" }
         os.homedir(),
         ".local",
         "bin",
-        `${ideName.toLowerCase()}-cdp`
+        `${ideName.toLowerCase()}-cdp`,
       );
       const cmd = `sleep 2 && "${wrapperPath}" ${folders}`;
       spawn("sh", ["-c", cmd], { detached: true, stdio: "ignore" }).unref();
@@ -192,7 +192,7 @@ if ($modified) { Write-Output "MODIFIED" } else { Write-Output "NO_CHANGE" }
 
     setTimeout(
       () => vscode.commands.executeCommand("workbench.action.quit"),
-      500
+      500,
     );
   }
 
@@ -202,11 +202,12 @@ if ($modified) { Write-Output "MODIFIED" } else { Write-Output "NO_CHANGE" }
       fs.writeFileSync(tempFile, script, "utf8");
       const result = execSync(
         `powershell -ExecutionPolicy Bypass -File "${tempFile}"`,
-        { encoding: "utf8" }
+        { encoding: "utf8" },
       );
       fs.unlinkSync(tempFile);
       return result;
-    } catch {
+    } catch (e: any) {
+      this.log(`PowerShell execution failed: ${e.message}`);
       return "";
     }
   }

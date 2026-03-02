@@ -41,7 +41,9 @@ export class CDPHandler {
       try {
         const pages = await this.getPages(port);
         if (pages.length > 0) return true;
-      } catch {}
+      } catch (e: any) {
+        this.log(`Port ${port} check failed: ${e.message}`);
+      }
     }
     return false;
   }
@@ -70,7 +72,9 @@ export class CDPHandler {
           }
           await this.inject(id, config);
         }
-      } catch {}
+      } catch (e: any) {
+        this.log(`Port ${port} scan error: ${e.message}`);
+      }
     }
   }
 
@@ -79,7 +83,9 @@ export class CDPHandler {
       try {
         await this.evaluate(id, "if(window.__egoStop) window.__egoStop()");
         conn.ws.close();
-      } catch {}
+      } catch (e: any) {
+        this.log(`Stop error for ${id}: ${e.message}`);
+      }
     }
     this.connections.clear();
   }
@@ -178,7 +184,9 @@ export class CDPHandler {
             clearTimeout(timeout);
             resolve(msg.result);
           }
-        } catch {}
+        } catch {
+          /* JSON parse failed for CDP message, skip */
+        }
       };
 
       conn.ws.on("message", onMessage);

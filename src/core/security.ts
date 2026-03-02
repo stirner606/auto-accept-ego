@@ -164,13 +164,15 @@ export class SecurityEngine {
 
     // Decode Base64 patterns
     const base64Match = result.match(
-      /echo\s+["']?([A-Za-z0-9+/=]{10,})["']?\s*\|\s*base64\s+-d/
+      /echo\s+["']?([A-Za-z0-9+/=]{10,})["']?\s*\|\s*base64\s+-d/,
     );
     if (base64Match) {
       try {
         const decoded = Buffer.from(base64Match[1], "base64").toString("utf-8");
         result = decoded;
-      } catch {}
+      } catch {
+        /* Base64 decode failed, skip deobfuscation */
+      }
     }
 
     // Decode hex patterns
@@ -297,7 +299,7 @@ export class SecurityEngine {
             const isInWorkspace = workspaceFolders.some((folder) =>
               foundPath
                 .toLowerCase()
-                .startsWith(folder.uri.fsPath.toLowerCase())
+                .startsWith(folder.uri.fsPath.toLowerCase()),
             );
 
             if (!isInWorkspace) {
@@ -322,7 +324,7 @@ export class SecurityEngine {
     // Safe Mode: Only whitelist allowed
     if (safeMode) {
       const isWhitelisted = whitelist.some((w) =>
-        command.toLowerCase().includes(w.toLowerCase())
+        command.toLowerCase().includes(w.toLowerCase()),
       );
       if (!isWhitelisted) {
         return {
