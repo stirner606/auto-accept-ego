@@ -138,11 +138,9 @@ export async function activate(context: vscode.ExtensionContext) {
   console.log("Auto Accept Ego: Activation complete");
 }
 
-async function startPolling(context: vscode.ExtensionContext): Promise<void> {
-  if (pollTimer) clearInterval(pollTimer);
-
+function getBannedCommands(): string[] {
   const config = vscode.workspace.getConfiguration("auto-accept-ego");
-  const bannedCommands = [
+  return [
     ...config.get<string[]>("customBlacklist", []),
     // Built-in dangerous patterns
     "rm -rf /",
@@ -157,6 +155,13 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
     "> /dev/sda",
     "chmod -R 777 /",
   ];
+}
+
+async function startPolling(context: vscode.ExtensionContext): Promise<void> {
+  if (pollTimer) clearInterval(pollTimer);
+
+  const config = vscode.workspace.getConfiguration("auto-accept-ego");
+  const bannedCommands = getBannedCommands();
 
   // Start CDP
   await cdpHandler.start({
@@ -188,20 +193,7 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
     // Re-sync with browser
     await cdpHandler.start({
       pollInterval: 300,
-      bannedCommands: [
-        ...config.get<string[]>("customBlacklist", []),
-        "rm -rf /",
-        "rm -rf ~",
-        "rm -rf *",
-        "format c:",
-        "del /f /s /q",
-        "rmdir /s /q",
-        ":(){:|:&};:",
-        "dd if=",
-        "mkfs.",
-        "> /dev/sda",
-        "chmod -R 777 /",
-      ],
+      bannedCommands: getBannedCommands(),
       whitelist: config.get<string[]>("whitelist", []),
       safeMode: config.get<boolean>("safeMode", false),
     });
