@@ -8,6 +8,12 @@
 
   if (typeof window === "undefined") return;
 
+  // Constants
+  const DEFAULT_POLL_INTERVAL_MS = 300;
+  const MAX_BUTTON_TEXT_LENGTH = 50;
+  const MAX_DOM_TRAVERSE_DEPTH = 10;
+  const MAX_SIBLING_SCAN_COUNT = 5;
+
   // State
   window.__egoState = window.__egoState || {
     isRunning: false,
@@ -16,7 +22,7 @@
     bannedCommands: [],
     whitelist: [],
     safeMode: false,
-    pollInterval: 300,
+    pollInterval: DEFAULT_POLL_INTERVAL_MS,
   };
 
   const log = (msg) => console.log(`[AutoAcceptEgo] ${msg}`);
@@ -69,7 +75,7 @@
   // Check if element is a valid accept button
   function isAcceptButton(el) {
     const text = (el.textContent || "").trim().toLowerCase();
-    if (text.length === 0 || text.length > 50) return false;
+    if (text.length === 0 || text.length > MAX_BUTTON_TEXT_LENGTH) return false;
 
     // Check reject patterns first
     if (REJECT_PATTERNS.some((r) => text.includes(r))) return false;
@@ -95,11 +101,11 @@
     let container = el.parentElement;
     let depth = 0;
 
-    while (container && depth < 10) {
+    while (container && depth < MAX_DOM_TRAVERSE_DEPTH) {
       let sibling = container.previousElementSibling;
       let count = 0;
 
-      while (sibling && count < 5) {
+      while (sibling && count < MAX_SIBLING_SCAN_COUNT) {
         if (sibling.tagName === "PRE" || sibling.tagName === "CODE") {
           commandText += " " + sibling.textContent.trim();
         }
@@ -192,7 +198,7 @@
             view: window,
             bubbles: true,
             cancelable: true,
-          })
+          }),
         );
         window.__egoState.clicks++;
         clicked++;

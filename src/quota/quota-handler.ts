@@ -31,6 +31,8 @@ export class QuotaHandler {
   private isInitialized = false;
   private static readonly MAX_RETRIES = 3;
   private static readonly RETRY_DELAY_MS = 10000; // 10 seconds
+  private static readonly PORT_TEST_TIMEOUT_MS = 3000;
+  private static readonly API_REQUEST_TIMEOUT_MS = 5000;
 
   constructor() {
     this.processFinder = new ProcessFinder();
@@ -85,7 +87,7 @@ export class QuotaHandler {
           "Connect-Protocol-Version": "1",
         },
         rejectUnauthorized: false,
-        timeout: 3000,
+        timeout: QuotaHandler.PORT_TEST_TIMEOUT_MS,
       };
 
       const req = https.request(options, (res) => {
@@ -204,7 +206,7 @@ export class QuotaHandler {
           "X-Codeium-Csrf-Token": this.csrfToken,
         },
         rejectUnauthorized: false,
-        timeout: 5000,
+        timeout: QuotaHandler.API_REQUEST_TIMEOUT_MS,
       };
 
       const req = https.request(options, (res) => {

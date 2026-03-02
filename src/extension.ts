@@ -13,6 +13,11 @@ let relauncher: Relauncher;
 let quotaHandler: QuotaHandler;
 let pollTimer: NodeJS.Timeout | null = null;
 
+const CDP_POLL_INTERVAL_MS = 300;
+const STATS_POLL_INTERVAL_MS = 5000;
+const INITIAL_QUOTA_DELAY_MS = 10000;
+const QUOTA_POLL_INTERVAL_MS = 60000;
+
 export async function activate(context: vscode.ExtensionContext) {
   // Initialize systems
   I18n.init();
@@ -165,19 +170,19 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
 
   // Start CDP
   await cdpHandler.start({
-    pollInterval: 300,
+    pollInterval: CDP_POLL_INTERVAL_MS,
     bannedCommands,
     whitelist: config.get<string[]>("whitelist", []),
     safeMode: config.get<boolean>("safeMode", false),
   });
 
   // Start Quota Polling (60s interval)
-  quotaHandler.startPolling(60000);
+  quotaHandler.startPolling(QUOTA_POLL_INTERVAL_MS);
 
   // Initial delayed check (10s) to catch process startup
   setTimeout(() => {
     quotaHandler.fetchQuota();
-  }, 10000);
+  }, INITIAL_QUOTA_DELAY_MS);
 
   // Poll for stats every 5 seconds
   pollTimer = setInterval(async () => {
@@ -192,12 +197,12 @@ async function startPolling(context: vscode.ExtensionContext): Promise<void> {
 
     // Re-sync with browser
     await cdpHandler.start({
-      pollInterval: 300,
+      pollInterval: CDP_POLL_INTERVAL_MS,
       bannedCommands: getBannedCommands(),
       whitelist: config.get<string[]>("whitelist", []),
       safeMode: config.get<boolean>("safeMode", false),
     });
-  }, 5000);
+  }, STATS_POLL_INTERVAL_MS);
 
   console.log("Auto Accept Ego: Polling started");
 }
