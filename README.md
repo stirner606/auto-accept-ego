@@ -1,5 +1,8 @@
 # Auto Accept Ego 🛡️
 
+> [!NOTE]
+> **Project Archived / Deprecated:** With recent updates to Antigravity IDE, native auto-execution (`always-proceed`) and sandboxing are now officially built into the core platform. This project has served its purpose and is now archived.
+
 **The professional auto-acceptance engine for Antigravity AI agents.**
 
 ![Auto Accept Ego Dashboard - Statistics](images/dashboard-stats.png)
